@@ -16,12 +16,16 @@ float out_left, out_right;
 
 int main(void)
 {
+    xil_printf("Audio Core starting, waiting for UI core initialization...\n");
+    
     // Wait for the UI core to have everything set up
-    // do {
-    //     msleep(20);
-    //     Xil_DCacheInvalidateRange((UINTPTR)sharedMem, sizeof(SharedMem));
-    //     __asm volatile("dmb sy" ::: "memory");
-    // } while (sharedMem->state == 0);
+    do {
+        msleep(20);
+        Xil_DCacheInvalidateRange((UINTPTR)sharedMem, sizeof(SharedMem));
+        __asm volatile("dmb sy" ::: "memory");
+    } while (sharedMem->state == 0);
+    
+    xil_printf("UI core ready signal received, initializing audio processing...\n");
 
     // Initialize EQ filter state
     eqState = EQ_filters_init();

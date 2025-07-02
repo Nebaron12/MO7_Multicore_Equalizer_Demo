@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <xiicps.h>
+#include <sleep.h>
 
 /* Slave address for the ADAU audio controller 8 */
 #define IIC_SLAVE_ADDR			0x76
@@ -64,6 +65,7 @@ enum audio_regs {
 };
 
 /* Prototype Functions */
+int verify_codec_response(XIicPs* IIC);
 void configure_audio_codec(XIicPs* IIC);
 void AudioPllConfig(XIicPs* IIC);
 void AudioWriteToReg(XIicPs* IIC, unsigned char u8RegAddr, unsigned char u8Data);

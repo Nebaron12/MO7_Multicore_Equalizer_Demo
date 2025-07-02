@@ -59,6 +59,11 @@ int TLA2528_WriteRegister(TLA2528 *dev, uint8_t reg_addr, uint8_t data) {
     int status;
 
     status = XIicPs_MasterSendPolled(dev->Iic, tx, 3, dev->Address);
+    if (status != XST_SUCCESS) return status;
+    
+    // Wait for I2C transaction to complete
+    while (XIicPs_BusIsBusy(dev->Iic));
+    
     return status;
 }
 

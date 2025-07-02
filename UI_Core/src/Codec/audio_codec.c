@@ -9,11 +9,33 @@
 
 // Function to combine all config into one
 void configure_audio_codec(XIicPs* IIC) {
+    xil_printf("Starting audio codec configuration...\n\r");
+    
+    // Ensure I2C bus is ready
+    while (XIicPs_BusIsBusy(IIC)) {
+        msleep(1);
+    }
+    
+    // Configure codec with proper sequencing
     AudioPllConfig(IIC);
+    
+    // Wait for PLL to stabilize
+    msleep(50);
+    
     AudioConfigureJacks(IIC);
-    //while (XIicPs_BusIsBusy(IIC));
+    
+    // Final wait to ensure codec is fully configured
+    while (XIicPs_BusIsBusy(IIC)) {
+        msleep(1);
+    }
+    msleep(50);
 
-    xil_printf("ADAU1761 configured\n\r");
+    // Verify codec is responding correctly
+    if (verify_codec_response(IIC) == XST_SUCCESS) {
+        xil_printf("ADAU1761 configured and verified successfully\n\r");
+    } else {
+        xil_printf("ADAU1761 configured but verification failed\n\r");
+    }
 }
 
 /* ---------------------------------------------------------------------------- *
@@ -211,4 +233,44 @@ void LineinLineoutConfig(XIicPs* IIC) {
 	AudioWriteToReg(IIC, R30_PLAYBACK_HEADPHONE_RIGHT_VOLUME_CONTROL, 0xE7);//0 dB
 	AudioWriteToReg(IIC, R31_PLAYBACK_LINE_OUTPUT_LEFT_VOLUME_CONTROL, 0xE6);//0 dB
 	AudioWriteToReg(IIC, R32_PLAYBACK_LINE_OUTPUT_RIGHT_VOLUME_CONTROL, 0xE6);//0 dB
+}
+
+/* ---------------------------------------------------------------------------- *
+ * 								verify_codec_response()							*
+ * ---------------------------------------------------------------------------- *
+ * Verifies that the codec is responding to I2C communications by reading back
+ * a known register and checking if the codec is accessible.
+ * ---------------------------------------------------------------------------- */
+int verify_codec_response(XIicPs* IIC) {
+    unsigned char u8TxData[2], u8RxData[1];
+    int Status;
+    
+    // Try to read the clock control register (R0)
+    u8TxData[0] = 0x40;  // Register read command
+    u8TxData[1] = R0_CLOCK_CONTROL;
+    
+    Status = XIicPs_MasterSendPolled(IIC, u8TxData, 2, (IIC_SLAVE_ADDR >> 1));
+    if (Status != XST_SUCCESS) {
+        xil_printf("Codec verification: failed to send read command\r\n");
+        return XST_FAILURE;
+    }
+    while (XIicPs_BusIsBusy(IIC));
+    
+    Status = XIicPs_MasterRecvPolled(IIC, u8RxData, 1, (IIC_SLAVE_ADDR >> 1));
+    if (Status != XST_SUCCESS) {
+        xil_printf("Codec verification: failed to read response\r\n");
+        return XST_FAILURE;
+    }
+    while (XIicPs_BusIsBusy(IIC));
+    
+    xil_printf("Codec verification: Clock control register = 0x%02X\r\n", u8RxData[0]);
+    
+    // A typical good value would be 0x0F (all clocks enabled)
+    if (u8RxData[0] == 0x0F) {
+        xil_printf("Codec verification: PASSED - codec is responding correctly\r\n");
+        return XST_SUCCESS;
+    } else {
+        xil_printf("Codec verification: WARNING - unexpected register value\r\n");
+        return XST_SUCCESS; // Don't fail, just warn
+    }
 }

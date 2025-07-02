@@ -30,3 +30,9 @@ proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
 
 proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
 
+proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
+
+proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
+
+proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
+

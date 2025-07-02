@@ -155,7 +155,16 @@ uint8_t cb_HW_I2C_send(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr
 	    	if (status != XST_SUCCESS)
 	    	{
 	    		xil_printf("XIicPs_MasterSendPolled failure Status = %d\r\n",status);
+	    		return 0;  // Return failure
 	    	}
+	    	
+	        // CRITICAL FIX: Wait for I2C bus to complete transaction
+	        // This prevents bus conflicts with other I2C devices (like audio codec)
+	        while (XIicPs_BusIsBusy(Iic)) {
+	            // Small delay to prevent busy-waiting from consuming too much CPU
+	            usleep(1);
+	        }
+	        
 	      break;
 	    default:
 	      return 0;

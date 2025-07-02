@@ -19,18 +19,32 @@ int main()
     resetSharedMem();
 
     // Initialize I2C and UART
-    if ((I2C_Initialize(&IicInstance, XPAR_XIICPS_0_BASEADDR) || I2C_Initialize(&IicCodec, XPAR_XIICPS_1_BASEADDR)) != XST_SUCCESS) {
-        xil_printf("I2C Initialization failed\n");
+    xil_printf("Initializing I2C buses...\n");
+    if (I2C_Initialize(&IicInstance, XPAR_XIICPS_0_BASEADDR) != XST_SUCCESS) {
+        xil_printf("I2C0 (OLED/Fader) Initialization failed\n");
         return XST_FAILURE;
     }
+    if (I2C_Initialize(&IicCodec, XPAR_XIICPS_1_BASEADDR) != XST_SUCCESS) {
+        xil_printf("I2C1 (Codec) Initialization failed\n");
+        return XST_FAILURE;
+    }
+    
+    // Wait for I2C buses to stabilize
+    msleep(50);
+    
     if (UART_Init(&uartControl, &UartInstance, &sharedMem->eqControls) != XST_SUCCESS) {
         xil_printf("UART Initialization failed\n");
         return XST_FAILURE;
     }
-    xil_printf("I2C and UART initialized\n");
+    xil_printf("I2C and UART initialized successfully\n");
 
     // Configure the Audio Codec
+    xil_printf("Configuring audio codec...\n");
     configure_audio_codec(&IicCodec);
+    
+    // Wait for codec to be fully configured
+    msleep(200);  // Increased delay for more reliable codec initialization
+    xil_printf("Audio codec configuration complete\n");
 
     // Initialize the OLED display and print a welcome message
     initDisplay(&oledDisplay, &IicInstance);
@@ -43,12 +57,17 @@ int main()
     faderPanelInit(&faderPanel, &IicInstance, &sharedMem->eqControls);
     xil_printf("Fader panel initialized\n");
 
+    // Add a delay to ensure codec is fully configured
+    msleep(100);
+    
     // Set the state variable in shared memory so the audio core knows to start
-    // Xil_DCacheFlushRange((UINTPTR)sharedMem, sizeof(SharedMem));
-    // __asm volatile("dmb sy" ::: "memory");
-    // sharedMem->state = 1;
-    // Xil_DCacheFlushRange((UINTPTR)sharedMem, sizeof(SharedMem));
-    // __asm volatile("dmb sy" ::: "memory");
+    Xil_DCacheFlushRange((UINTPTR)sharedMem, sizeof(SharedMem));
+    __asm volatile("dmb sy" ::: "memory");
+    sharedMem->state = 1;
+    Xil_DCacheFlushRange((UINTPTR)sharedMem, sizeof(SharedMem));
+    __asm volatile("dmb sy" ::: "memory");
+    
+    xil_printf("UI Core initialization complete, signaling audio core\n");
 
     // Enter the main loop
     while (1) {
