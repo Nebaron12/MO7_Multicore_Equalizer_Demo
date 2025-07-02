@@ -1,0 +1,25 @@
+create libxil.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/xadcps/src/libxadcps.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/vtc/src/libvtc.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/video_common/src/libvideo_common.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/usbps/src/libusbps.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/uartps/src/libuartps.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/uartlite/src/libuartlite.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/tmrctr/src/libtmrctr.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/sysmon/src/libsysmon.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/spips/src/libspips.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/sdps/src/libsdps.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/scuwdt/src/libscuwdt.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/scutimer/src/libscutimer.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/scugic/src/libscugic.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/qspips/src/libqspips.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/intc/src/libintc.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/iicps/src/libiicps.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/gpio/src/libgpio.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/emacps/src/libemacps.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/dmaps/src/libdmaps.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/devcfg/src/libdevcfg.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/coresightps_dcc/src/libcoresightps_dcc.a
+addlib D:/Fontys/MO7/SID_Multicore_Demo/platform/ps7_cortexa9_1/standalone_ps7_cortexa9_1/bsp/libsrc/build_configs/gen_bsp/libsrc/axivdma/src/libaxivdma.a
+save
+end

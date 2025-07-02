@@ -1,0 +1,156 @@
+Arduino_arduino_intr_en_pins_2_3:
+- axi_gpio
+- gpio
+Arduino_arduino_no_intr_pins:
+- axi_gpio
+- gpio
+Audio_audio_codec_ctrl_0:
+- audio_codec_ctrl
+- None
+Buck_Controller_0:
+- Buck_Controller
+- None
+Ultrasone_0:
+- Ultrasone
+- None
+User_LDR_gpio:
+- axi_gpio
+- gpio
+User_MD_gpio:
+- axi_gpio
+- gpio
+User_axi_timer_0:
+- axi_timer
+- tmrctr
+User_axi_timer_1:
+- axi_timer
+- tmrctr
+User_axi_timer_2:
+- axi_timer
+- tmrctr
+User_btns_gpio:
+- axi_gpio
+- gpio
+User_leds_gpio:
+- axi_gpio
+- gpio
+User_rgbleds_gpio:
+- axi_gpio
+- gpio
+User_switches_gpio:
+- axi_gpio
+- gpio
+User_user_intc:
+- axi_intc
+- intc
+Video_axi_dynclk:
+- axi_dynclk
+- None
+Video_axi_vdma:
+- axi_vdma
+- axivdma
+Video_hdmi_out_hpd_video:
+- axi_gpio
+- gpio
+Video_vtc_out:
+- v_tc
+- vtc
+axi_uartlite_0:
+- axi_uartlite
+- uartlite
+lcd_controller_0:
+- lcd_controller
+- None
+modulator_axi_ip_G_0:
+- modulator_axi_ip_G
+- None
+ps7_afi_0:
+- ps7_afi
+- None
+ps7_afi_1:
+- ps7_afi
+- None
+ps7_afi_2:
+- ps7_afi
+- None
+ps7_afi_3:
+- ps7_afi
+- None
+ps7_coresight_comp_0:
+- ps7_coresight_comp
+- coresightps_dcc
+ps7_ddrc_0:
+- ps7_ddrc
+- None
+ps7_dev_cfg_0:
+- ps7_dev_cfg
+- devcfg
+ps7_dma_ns:
+- ps7_dma
+- None
+ps7_dma_s:
+- ps7_dma
+- dmaps
+ps7_ethernet_0:
+- ps7_ethernet
+- emacps
+ps7_globaltimer_0:
+- ps7_globaltimer
+- None
+ps7_gpv_0:
+- ps7_gpv
+- None
+ps7_i2c_0:
+- ps7_i2c
+- iicps
+ps7_i2c_1:
+- ps7_i2c
+- iicps
+ps7_intc_dist_0:
+- ps7_intc_dist
+- scugic
+ps7_iop_bus_config_0:
+- ps7_iop_bus_config
+- None
+ps7_ocmc_0:
+- ps7_ocmc
+- None
+ps7_pl310_0:
+- ps7_pl310
+- None
+ps7_pmu_0:
+- ps7_pmu
+- None
+ps7_qspi_0:
+- ps7_qspi
+- qspips
+ps7_scuc_0:
+- ps7_scuc
+- None
+ps7_scutimer_0:
+- ps7_scutimer
+- scutimer
+ps7_scuwdt_0:
+- ps7_scuwdt
+- scuwdt
+ps7_sd_0:
+- ps7_sdio
+- sdps
+ps7_slcr_0:
+- ps7_slcr
+- None
+ps7_spi_0:
+- ps7_spi
+- spips
+ps7_uart_0:
+- ps7_uart
+- uartps
+ps7_usb_0:
+- ps7_usb
+- usbps
+ps7_xadc_0:
+- ps7_xadc
+- xadcps
+xadc_wiz_0:
+- xadc_wiz
+- sysmon
