@@ -6,7 +6,7 @@ void oledRenderEqualizer(OLED* screen, const volatile EQcontrols* eqCtrls)
     // Constants
     const int numBars = FILTER_COUNT + 1; // 6 EQ + 1 volume
     const int barWidth = 10;
-    const int barSpacing = ;
+    const int barSpacing = 6;
     const int barBaseY = screen->DispHeight - 10; // Leave space for gain text
     const int barMaxHeight = 40;
     const int valueTextY = screen->DispHeight - 1;
@@ -17,7 +17,7 @@ void oledRenderEqualizer(OLED* screen, const volatile EQcontrols* eqCtrls)
 
     // Draw filter type in top-left
     u8g2_SetFont(&screen->u8g2, STD_FONT);
-    const char* filterNames[] = { "Direct", "6-Band EQ" };
+    const char* filterNames[] = { "Direct", "7-Band EQ" };
     char filterStr[16];
     if (eqCtrls->filterType == 0)
         snprintf(filterStr, sizeof(filterStr), "Type:%s", filterNames[0]);

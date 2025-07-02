@@ -176,7 +176,7 @@ float32x4_t process_iir_neon(BiquadSectionNeon* filt, float32x4_t input, int num
 // }
 
 
-// For the 6 band equalizer
+// For the 7 band equalizer
 void apply_equalizer_neon(EQFilterState* eqState, float in_left, float in_right, float* out_left, float* out_right, volatile EQcontrols* EQctrls)
 {
     // Interleaved input: [L, R, L, R]
@@ -186,6 +186,7 @@ void apply_equalizer_neon(EQFilterState* eqState, float in_left, float in_right,
     float32x4_t AB = process_iir_neon(eqState->filterArrays[0], input, eqState->maxSectionsArray[0]);
     float32x4_t CD = process_iir_neon(eqState->filterArrays[1], input, eqState->maxSectionsArray[1]);
     float32x4_t EF = process_iir_neon(eqState->filterArrays[2], input, eqState->maxSectionsArray[2]);
+    float32x4_t G = process_iir_neon(eqState->filterArrays[3], input, eqState->maxSectionsArray[3]);
 
     // Extract each float from the NEON vectors
     float ab0 = vgetq_lane_f32(AB, 0);
@@ -203,20 +204,27 @@ void apply_equalizer_neon(EQFilterState* eqState, float in_left, float in_right,
     float ef2 = vgetq_lane_f32(EF, 2);
     float ef3 = vgetq_lane_f32(EF, 3);
 
+    float g0 = vgetq_lane_f32(G, 0);
+    float g1 = vgetq_lane_f32(G, 1);
+    float g2 = vgetq_lane_f32(G, 2);
+    float g3 = vgetq_lane_f32(G, 3);
+
     // Compute left and right outputs
     *out_left =    (ab0 * EQctrls->EQgain[0] +
                     ab2 * EQctrls->EQgain[1] +
                     cd0 * EQctrls->EQgain[2] +
                     cd2 * EQctrls->EQgain[3] +
                     ef0 * EQctrls->EQgain[4] +
-                    ef2 * EQctrls->EQgain[5]);
+                    ef2 * EQctrls->EQgain[5] +
+                    g0 * EQctrls->EQgain[6]);
 
     *out_right =   (ab1 * EQctrls->EQgain[0] +
                     ab3 * EQctrls->EQgain[1] +
                     cd1 * EQctrls->EQgain[2] +
                     cd3 * EQctrls->EQgain[3] +
                     ef1 * EQctrls->EQgain[4] +
-                    ef3 * EQctrls->EQgain[5]);
+                    ef3 * EQctrls->EQgain[5] +
+                    g1 * EQctrls->EQgain[6]);
 }
 
 EQFilterState* EQ_filters_init(void) {
@@ -228,9 +236,10 @@ EQFilterState* EQ_filters_init(void) {
     if (!state->maxSectionsArray) { free(state); return NULL; }
 
     // Calculate max sections for each filter pair
-    state->maxSectionsArray[0] = MAX(MWSPT_NSEC_A, MWSPT_NSEC_B);
-    state->maxSectionsArray[1] = MAX(MWSPT_NSEC_C, MWSPT_NSEC_D);
-    state->maxSectionsArray[2] = MAX(MWSPT_NSEC_E, MWSPT_NSEC_F);
+    state->maxSectionsArray[0] = MAX(MWSPT_NSEC_A, MWSPT_NSEC_B);  // A-B pair
+    state->maxSectionsArray[1] = MAX(MWSPT_NSEC_C, MWSPT_NSEC_D);  // C-D pair
+    state->maxSectionsArray[2] = MAX(MWSPT_NSEC_E, MWSPT_NSEC_F);  // E-F pair
+    state->maxSectionsArray[3] = MWSPT_NSEC_G;                      // G alone
 
     state->filterArrays = (BiquadSectionNeon**)malloc(state->numFilterPairs * sizeof(BiquadSectionNeon*));
     if (!state->filterArrays) { free(state->maxSectionsArray); free(state); return NULL; }
@@ -239,8 +248,9 @@ EQFilterState* EQ_filters_init(void) {
     state->filterArrays[0] = (BiquadSectionNeon*)malloc(state->maxSectionsArray[0] * sizeof(BiquadSectionNeon));
     state->filterArrays[1] = (BiquadSectionNeon*)malloc(state->maxSectionsArray[1] * sizeof(BiquadSectionNeon));
     state->filterArrays[2] = (BiquadSectionNeon*)malloc(state->maxSectionsArray[2] * sizeof(BiquadSectionNeon));
+    state->filterArrays[3] = (BiquadSectionNeon*)malloc(state->maxSectionsArray[3] * sizeof(BiquadSectionNeon));
 
-    if (!state->filterArrays[0] || !state->filterArrays[1] || !state->filterArrays[2]) {
+    if (!state->filterArrays[0] || !state->filterArrays[1] || !state->filterArrays[2] || !state->filterArrays[3]) {
         for (size_t i = 0; i < state->numFilterPairs; ++i)
             if (state->filterArrays[i]) free(state->filterArrays[i]);
         free(state->filterArrays);
@@ -250,6 +260,7 @@ EQFilterState* EQ_filters_init(void) {
         return NULL;
     }
 
+    // Initialize filter pairs
     init_biquads_neon(state->filterArrays[0],
          NUM_A, DEN_A, NL_A, 
          NUM_B, DEN_B, NL_B, 
@@ -262,6 +273,12 @@ EQFilterState* EQ_filters_init(void) {
          NUM_E, DEN_E, NL_E, 
          NUM_F, DEN_F, NL_F, 
          MWSPT_NSEC_E, MWSPT_NSEC_F);
+    
+    // For the single filter G, we use the same filter for both channels
+    init_biquads_neon(state->filterArrays[3],
+         NUM_G, DEN_G, NL_G, 
+         NUM_G, DEN_G, NL_G, 
+         MWSPT_NSEC_G, MWSPT_NSEC_G);
 
     return state;
 }

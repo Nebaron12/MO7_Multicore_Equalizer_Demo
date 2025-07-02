@@ -16,3 +16,17 @@ proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
 
 proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
 
+proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
+
+proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
+
+comp = client.get_component(name="UI_Core")
+comp.build()
+
+comp = client.get_component(name="Audio_Core")
+comp.build()
+
+proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
+
+proj.build(comp_name = ["Audio_Core", "UI_Core"],build_comps = False)
+
