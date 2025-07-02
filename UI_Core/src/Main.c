@@ -7,7 +7,7 @@
 #include "audio_codec.h"
 
 // UI components
-XIicPs IicInstance, IicCodec; // I2C instance for communication (The codec has its own I2C channel)
+XIicPs IicInstance; // I2C instance for communication (The codec has its own I2C channel)
 XUartPs UartInstance; // UART instance for communication
 UARTControl uartControl; // UART control instance
 OLED oledDisplay; // OLED display instance
@@ -19,7 +19,7 @@ int main()
     resetSharedMem();
 
     // Initialize I2C and UART
-    if ((I2C_Initialize(&IicInstance, XPAR_XIICPS_0_BASEADDR) || I2C_Initialize(&IicCodec, XPAR_XIICPS_1_BASEADDR)) != XST_SUCCESS) {
+    if (I2C_Initialize(&IicInstance, XPAR_XIICPS_0_BASEADDR) != XST_SUCCESS) {
         xil_printf("I2C Initialization failed\n");
         return XST_FAILURE;
     }
@@ -29,26 +29,22 @@ int main()
     }
     xil_printf("I2C and UART initialized\n");
 
-    // Configure the Audio Codec
-    configure_audio_codec(&IicCodec);
-
-    // Initialize the OLED display and print a welcome message
-    initDisplay(&oledDisplay, &IicInstance);
-    xil_printf("Display initialized\n");
-
-    // Initialize the EQControls instance
-    EQcontrolsInit(&sharedMem->eqControls);
-
     // Initialize the fader panel
     faderPanelInit(&faderPanel, &IicInstance, &sharedMem->eqControls);
     xil_printf("Fader panel initialized\n");
+    msleep(20);
 
-    // Set the state variable in shared memory so the audio core knows to start
-    // Xil_DCacheFlushRange((UINTPTR)sharedMem, sizeof(SharedMem));
-    // __asm volatile("dmb sy" ::: "memory");
-    // sharedMem->state = 1;
-    // Xil_DCacheFlushRange((UINTPTR)sharedMem, sizeof(SharedMem));
-    // __asm volatile("dmb sy" ::: "memory");
+    // Initialize the OLED display
+    initDisplay(&oledDisplay, &IicInstance);
+    xil_printf("Display initialized\n");
+    msleep(20);
+
+    // Configure the Audio Codec
+    // configure_audio_codec(&IicCodec);
+    // msleep(20);
+
+    // Initialize the EQControls instance
+    EQcontrolsInit(&sharedMem->eqControls);
 
     // Enter the main loop
     while (1) {

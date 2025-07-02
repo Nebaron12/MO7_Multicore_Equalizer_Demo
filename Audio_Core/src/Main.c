@@ -4,8 +4,10 @@
 #include "SharedMem.h"
 #include "audio_codec.h"
 #include "EQ_NEON.h"
+#include "I2C.h"
 
 // Codec
+XIicPs IicCodec; // I2C instance for communication (The codec has its own I2C channel)
 uint32_t status_reg; // Uncomment if using the I2S status register instead of timer polling
 
 // Filtering
@@ -29,6 +31,23 @@ int main(void)
         xil_printf("Failed to initialize EQ filters!\n");
         return -1;
     }
+
+    // Wait for the UI core to set everything up and start updating the shared memory
+    msleep(200);
+
+    // Initialize I2C
+    if (I2C_Initialize(&IicCodec, XPAR_XIICPS_1_BASEADDR) != XST_SUCCESS) {
+        xil_printf("I2C Initialization failed\n");
+        return XST_FAILURE;
+    }
+
+    // Configure the Audio Codec
+    configure_audio_codec(&IicCodec);
+    msleep(20);
+
+    // Configure the Audio Codec
+    configure_audio_codec(&IicCodec);
+    msleep(20);
 
     // Enter the main loop
     while (1)

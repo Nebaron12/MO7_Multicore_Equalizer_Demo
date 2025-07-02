@@ -5,7 +5,6 @@
  */
 
 #include "audio_codec.h"
-#include <xiicps.h>
 
 // Function to combine all config into one
 void configure_audio_codec(XIicPs* IIC) {

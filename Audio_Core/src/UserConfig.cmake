@@ -30,12 +30,14 @@ set(USER_INCLUDE_DIRECTORIES
 "Codec"
 "EQ"
 "../../Multicore_Demo_System/SharedMem"
+"I2C"
 )
 set(USER_COMPILE_SOURCES
 "Main.c"
 "Codec/audio_codec.c"
 "EQ/EQ_NEON.c"
 "EQ/Coeffs.c"
+"I2C/I2C.c"
 )
 
 # -----------------------------------------
