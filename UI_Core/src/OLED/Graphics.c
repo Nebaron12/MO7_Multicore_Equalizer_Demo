@@ -4,7 +4,7 @@
 void oledRenderEqualizer(OLED* screen, const volatile EQcontrols* eqCtrls)
 {
     // Constants
-    const int numBars = FILTER_COUNT + 1; // 6 EQ + 1 volume
+    const int numBars = FILTER_COUNT + 1; // FILTER_COUNT EQ + 1 volume
     const int barWidth = 10;
     const int barSpacing = 6;
     const int barBaseY = screen->DispHeight - 10; // Leave space for gain text
